@@ -12,20 +12,48 @@ import sqlite3
 def restaurantlst(url):
   # This function takes in a url from the "Open Table" website, and creates a BeautifulSoup Object to parse through 
   # the site's HTML. The function returns a list of tuples which include the restaurant name as well as the restaurant's location.
-  pass
-  
+
+    restaurant_names =[]
+    restaurant_location =[]
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content,'html.parser')
+
+    spans = soup.find_all(class_='CCbGHaorgGHXgJqoOaXl')
+
+    for item in spans:
+      #print(item)
+      print(" ")
+      print(' ')
+      #restaurant_name = item.find("JXZMw_U1mlkR34yKzuyQ SnUm_1TfMxXpCYasofoO")
+      #print(restaurant_name)
+     
+      #JXZMw_U1mlkR34yKzuyQ SnUm_1TfMxXpCYasofoO
+
   # Write restuaurant list into a CSV file
 
 def write_csv(data, filename):
   # This file takes in a list of tuples and csv filename as input. It then iterates through the list of tuples 
   # to write multiple rows within the csv, outputting a csv file containing each restaurant name and restaurant location.
-  pass
   
+  # header = ('Restaurant Name', 'Restaurant Location', 'Rating')
+
+  # # with open(filename, 'w', newline='') as f:
+  #       writer = csv.writer(f)
+  #       writer.writerow(header)
+  #       for item in data:
+  #           writer.writerow(item)
+  pass
+
   # Setup database file
 
 def setUpDatabase(db_name):
   # This function simply takes in a string as input which contains the preferred database file name, and 
   # returns the cursor and connection to the created database.
+
+  # path = os.path.dirname(os.path.abspath(__file__))
+  #   conn = sqlite3.connect(path+'/'+db_name)
+  #   cur = conn.cursor()
+  #   return cur, conn
   pass
 
   # Create restaurant table if not exists
@@ -71,3 +99,5 @@ def main():
     pass
 
 #main()
+
+restaurantlst('https://www.opentable.com/lists/top-100-2021')
