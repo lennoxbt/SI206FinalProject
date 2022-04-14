@@ -21,13 +21,24 @@ def restaurantlst(url):
     spans = soup.find_all(class_='CCbGHaorgGHXgJqoOaXl')
 
     for item in spans:
+      restaurantNameinfo = soup.find_all(class_='H5kqSXUFObkmV6wfAw7p')
+     #restaurant_names.append(restaurantNameinfo.text)
+
+      for resturantName in restaurantNameinfo:
+        restaurant_names.append(resturantName.text)
+
+
+     # restaurantLocationinfo = soup.find_all(class_='UNOIq8wcqctrC7s3wHAW YQ2SmR3lcmrtTcxuktZA')
+      
+  
+
+      #print(restaurantName)
       #print(item)
-      print(" ")
-      print(' ')
-      #restaurant_name = item.find("JXZMw_U1mlkR34yKzuyQ SnUm_1TfMxXpCYasofoO")
-      #print(restaurant_name)
+      #print(restaurantName)
+      #print(restaurantLocationinfo)
      
-      #JXZMw_U1mlkR34yKzuyQ SnUm_1TfMxXpCYasofoO
+     
+    print(restaurant_names)
 
   # Write restuaurant list into a CSV file
 
