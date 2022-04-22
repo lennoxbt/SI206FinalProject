@@ -13,8 +13,8 @@ def restaurantlst(url):
   # This function takes in a url from the "Open Table" website, and creates a BeautifulSoup Object to parse through 
   # the site's HTML. The function returns a list of tuples which include the restaurant name as well as the restaurant's location.
 
-    restaurant_names =[]
-    restaurant_location =[]
+    restaurant_names = []
+    restaurant_location = []
     response = requests.get(url)
     soup = BeautifulSoup(response.content,'html.parser')
 
@@ -42,49 +42,48 @@ def write_csv(data, filename):
   header = ('Restaurant Name', 'Restaurant Location') #, 'Rating')
 
   with open(filename, 'w', newline='') as f:
-         writer = csv.writer(f)
-         writer.writerow(header)
-         for item in data:
-             writer.writerow(item)
- 
-
+    writer = csv.writer(f)
+    writer.writerow(header)
+    for item in data:
+      writer.writerow(item)
+  
   # Setup database file
 
 def setUpDatabase(db_name):
   # This function simply takes in a string as input which contains the preferred database file name, and 
   # returns the cursor and connection to the created database.
-
-   path = os.path.dirname(os.path.abspath(__file__))
-   conn = sqlite3.connect(path+'/'+db_name)
-   cur = conn.cursor()
-
-   return cur, conn
   
-
+  path = os.path.dirname(os.path.abspath(__file__))
+  conn = sqlite3.connect(path+'/'+db_name)
+  cur = conn.cursor()
+  
+  return cur, conn
+  
   # Create restaurant table if not exists
 
-def setUpRestaurantTable( cur, conn, restaurantlst,type, x = 0):
+def setUpRestaurantTable(cur, conn, restaurantlst,type, x = 0):
   # This file takes a database cursor and conneciton, list of restaurant names, restaurant type, and optional 
   # argument which specifies the starting position of the database id. The function creates a table, Restaurants, 
   # within the passed database and inserts each restaurant in restaurantlist, along with its corresponding id, location, and type.
-  cur.execute("CREATE TABLE IF NOT EXISTS Movies (id INTEGER PRIMARY KEY, title TEXT, location TEXT, typeid TEXT, openhouse_rating FLOAT, awards INTEGER, imdb_rating FLOAT, metascore FLOAT, rotten_tomatoes FLOAT, label INTEGER)")
-  for num in range(len(restaurantlst)):
-    id = num + x
-    cur.execute("INSERT INTO Restaurant (id,title,date,label) VALUES (?,?,?,?)",(id,restaurantlst[num][0],movielst[num][1],type))
-  conn.commit()
+
+  # cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, name TEXT, location TEXT, typeid TEXT, openhouse_rating FLOAT, yelp_rating FLOAT, label INTEGER)") # "CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, name TEXT, location TEXT, typeid TEXT, openhouse_rating FLOAT, awards INTEGER, yelp_rating FLOAT, metascore FLOAT, rotten_tomatoes FLOAT, label INTEGER)")
+  # for num in range(len(restaurantlst)):
+  #   id = num + x
+  #   cur.execute("INSERT INTO Restaurants (id,name,location,label) VALUES (?,?,?,?)",(id,restaurantlst[num][0],restaurantlst[num][1],type))
+  # conn.commit()
   pass
   
   # Create Type table is not exists
 
-# def setUpTypeTable(cur, conn, typelst):
-#     # This function takes in a databse cursor and connection, as well as a list of movie genres. It then creates
-#     # a table, Types, within the database, along with its corresponding id number.
-#     cur.execute("CREATE TABLE IF NOT EXISTS Genres (id INTEGER PRIMARY KEY, genre TEXT)")
-#     for i in range(len(restaurantlst)):
-#         cur.execute("INSERT OR IGNORE INTO Genres (id, genre) VALUES (?,?)", (i, restaurantlst[i]))
-#     conn.commit()
-#     pass
-
+def setUpTypeTable(cur, conn, typelst):
+  # This function takes in a databse cursor and connection, as well as a list of restaurant types. It then creates
+  # a table, Types, within the database, along with its corresponding id number.
+  
+  # cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, type TEXT)")
+  # for i in range(len(restaurantlst)):
+  #   cur.execute("INSERT OR IGNORE INTO Types (id, type) VALUES (?,?)", (i, restaurantlst[i]))
+  # conn.commit()
+  pass
 
 def main():
 
@@ -92,8 +91,6 @@ def main():
   write_csv(restaurant_tuple_lst,'restaurant.csv')
   cur, conn = setUpDatabase('restaurantData.db')
   setUpRestaurantTable(cur, conn, restaurantlst,type, x = 0)
-
-
 
 main()
 
