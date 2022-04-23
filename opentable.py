@@ -53,7 +53,7 @@ def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
   # This takes a database cursor and conneciton, list of restaurant names, restaurant type, and optional 
   # argument which specifies the starting position of the database id. The function creates a table, Restaurants, 
   # within the passed database and inserts each restaurant in restaurantlist, along with its corresponding id, location, and type.
-  cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY,Name TEXT,Type TEXT,Location TEXT, opentable_rating FLOAT, YELP1 INTEGER, YELP2 FLOAT, YELP3 FLOAT, YELP4 FLOAT)")
+  cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, Name TEXT, Type TEXT, Location TEXT, OpenTable_Rating FLOAT, Yelp_Rating FLOAT)")
   for num in range(len(restaurantlst)):
     id = num + x
     cur.execute("INSERT INTO Restaurants (id,Name,Type,Location) VALUES (?,?,?,?)",(id,restaurantlst[num][0],restaurantlst[num][1],restaurantlst[num][2]))
@@ -64,7 +64,7 @@ def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
 # def setUpTypeTable(cur, conn, typelst):
 #     # This function takes in a databse cursor and connection, as well as a list of restaurant type. It then creates
 #     # a table, Types, within the database, along with its corresponding id number.
-#
+
 #     cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, type TEXT)")
 #     for i in range(len(restaurantlst)):
 #         cur.execute("INSERT OR IGNORE INTO Types (id, type) VALUES (?,?)", (i, restaurantlst[i]))
