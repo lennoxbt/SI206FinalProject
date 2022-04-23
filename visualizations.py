@@ -13,7 +13,7 @@ import csv
 import os
 import sqlite3
 
-def getTypeGrossData(db_filename, label):
+def getTypeRatingData(db_filename, label):
     # This function takes in a database fiilename, and restaurant type as its input. It then creates a connection and cursor to the database,
     # and selects several values to calculate the average rating for each restaurant type in the database. It then outputs this 
     # information in a dictionary with the types as the key, and the ratings as the values. 
