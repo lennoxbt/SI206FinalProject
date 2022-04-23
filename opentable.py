@@ -48,8 +48,7 @@ def setUpDatabase(db_name):
    return cur, conn
   
 
-  #Create restaurant table if not exists 
-
+  #Create Restaurants table if not exists
 def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
   # This takes a database cursor and conneciton, list of restaurant names, restaurant type, and optional 
   # argument which specifies the starting position of the database id. The function creates a table, Restaurants, 
@@ -62,13 +61,13 @@ def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
 
   
   # Create Type table is not exists
-
 # def setUpTypeTable(cur, conn, typelst):
-#     # This function takes in a databse cursor and connection, as well as a list of movie genres. It then creates
+#     # This function takes in a databse cursor and connection, as well as a list of restaurant type. It then creates
 #     # a table, Types, within the database, along with its corresponding id number.
-#     cur.execute("CREATE TABLE IF NOT EXISTS Genres (id INTEGER PRIMARY KEY, genre TEXT)")
+#
+#     cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, type TEXT)")
 #     for i in range(len(restaurantlst)):
-#         cur.execute("INSERT OR IGNORE INTO Genres (id, genre) VALUES (?,?)", (i, restaurantlst[i]))
+#         cur.execute("INSERT OR IGNORE INTO Types (id, type) VALUES (?,?)", (i, restaurantlst[i]))
 #     conn.commit()
 #     pass
 
@@ -85,11 +84,6 @@ def write_csv(data, filename):
          for item in data:
              writer.writerow(item)
  
-
-  # Setup database file
-
-
-
 restaurantlst('https://www.opentable.com/lists/top-100-2021')
 
 def main():
@@ -99,11 +93,7 @@ def main():
   cur, conn = setUpDatabase('restaurantData.db')
   setUpRestaurantTable(cur, conn, restaurant_tuple_lst, x = 0)
 
-
-
 main()
-
-
 
 # def main():
 #     # This function calls all the above functions, setting up the database, defining the restaurant types, 
@@ -111,14 +101,14 @@ main()
     
 #     cur, conn = setUpDatabase('restaurantData.db')
 
-#     genres = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Thriller', 'War', 'Western']
-#     m1 = movielst('https://www.imdb.com/list/ls008939186/') 
-#     m2 = movielst('https://www.imdb.com/list/ls054431555/')
-#     movies = m1 + m2
+#     types = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Thriller', 'War', 'Western']
+#     r1 = restaurantlst('https://www.imdb.com/list/ls008939186/') 
+#     r2 = restaurantlst('https://www.imdb.com/list/ls054431555/')
+#     restaurants = r1 + r2
 
-#     write_csv(movies,'movies.csv')
+#     write_csv(restaurants,'restaurantss.csv')
 
-#     setUpGenreTable( cur, conn, genres)
-#     setUpMovieTable( cur, conn, m1,0)
-#     setUpMovieTable( cur, conn, m2,1,100)
+#     setUpRestaurantTable(cur, conn, types)
+#     setUpRestaurantTable(cur, conn, r1,0)
+#     setUpRestaurantTable(cur, conn, r2,1,100)
 #     pass
