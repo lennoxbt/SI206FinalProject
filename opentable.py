@@ -61,15 +61,15 @@ def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
 
   
   # Create Type table is not exists
-# def setUpTypeTable(cur, conn, typelst):
-#     # This function takes in a databse cursor and connection, as well as a list of restaurant type. It then creates
-#     # a table, Types, within the database, along with its corresponding id number.
+def setUpTypeTable(cur, conn, typelst):
+    # This function takes in a databse cursor and connection, as well as a list of restaurant type. It then creates
+    # a table, Types, within the database, along with its corresponding id number.
 
-#     cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, type TEXT)")
-#     for i in range(len(restaurantlst)):
-#         cur.execute("INSERT OR IGNORE INTO Types (id, type) VALUES (?,?)", (i, restaurantlst[i]))
-#     conn.commit()
-#     pass
+    # I FIXED THIS FUNCTION
+    cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, type TEXT)")
+    for i in range(len(typelst)):
+        cur.execute("INSERT OR IGNORE INTO Types (id, type) VALUES (?,?)", (i, typelst[i]))
+    conn.commit()
 
 # Write restuaurant list into a CSV file
 def write_csv(data, filename):
@@ -87,28 +87,17 @@ def write_csv(data, filename):
 restaurantlst('https://www.opentable.com/lists/top-100-2021')
 
 def main():
+  # This function calls all the above functions, setting up the database, defining the restaurant types, 
+  # grabbing the lists of restaurants, writing the csv, and setting up the database tables.
 
   restaurant_tuple_lst = restaurantlst('https://www.opentable.com/lists/top-100-2021')
-  
+  # I ADDED THE TYPES OF RESTAURANTS HERE
+  types = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
+
   cur, conn = setUpDatabase('restaurantData.db')
+
+  # TYPES TABLE ADDED
+  setUpTypeTable(cur, conn, types)
   setUpRestaurantTable(cur, conn, restaurant_tuple_lst, x = 0)
 
 main()
-
-# def main():
-#     # This function calls all the above functions, setting up the database, defining the restaurant types, 
-#     # grabbing the lists of restaurants, writing the csv, and setting up the database tables.
-    
-#     cur, conn = setUpDatabase('restaurantData.db')
-
-#     types = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Thriller', 'War', 'Western']
-#     r1 = restaurantlst('https://www.imdb.com/list/ls008939186/') 
-#     r2 = restaurantlst('https://www.imdb.com/list/ls054431555/')
-#     restaurants = r1 + r2
-
-#     write_csv(restaurants,'restaurantss.csv')
-
-#     setUpRestaurantTable(cur, conn, types)
-#     setUpRestaurantTable(cur, conn, r1,0)
-#     setUpRestaurantTable(cur, conn, r2,1,100)
-#     pass
