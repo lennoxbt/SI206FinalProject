@@ -30,7 +30,7 @@ def getTypeRatingData(db_filename, label):
     # second_count = {}
     # second_entry = {}
 
-    cur.execute('SELECT rating, type FROM Restaurants JOIN Types ON Restaurants.typeid = Types.id WHERE label='+str(label))
+    cur.execute('SELECT rating, type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.id WHERE label='+str(label))
     for row in cur:
         typ = row[-1]
         rating = row[0]
