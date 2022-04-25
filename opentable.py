@@ -74,16 +74,16 @@ def setUpRestaurantTable(cur, conn, restaurantlst, x = 0):
     cur.execute("INSERT INTO Restaurants (id,Name,Type,Location,opentable_rating) VALUES (?,?,?,?,?)",(id,restaurantlst[num][0],restaurantlst[num][1],restaurantlst[num][2],restaurantlst[num][3]))
   conn.commit()
 
-  
+  #a.id, a.Name, a.Type, a.Location, a.opentable_rating, a.Yelp_rating, a.YELP2, a.YELP3, a.YELP4, b.Type_id  FROM Restaurants a left JOIN Types b on a.Type = b.Type 
   # Create Type table is not exists
 
 def setUpTypeTable(cur, conn, typelst):
     # This function takes in a databse cursor and connection, as well as a list of restaurant type. It then creates
     # a table, Types, within the database, along with its corresponding id number.
 
-    cur.execute("CREATE TABLE IF NOT EXISTS Types (id INTEGER PRIMARY KEY, Type_id TEXT)")
+    cur.execute("CREATE TABLE IF NOT EXISTS Types (Type_id INTEGER PRIMARY KEY, Type TEXT)")
     for i in range(len(typelst)):
-        cur.execute("INSERT OR IGNORE INTO Types (id, Type_id) VALUES (?,?)", (i, typelst[i]))
+        cur.execute("INSERT OR IGNORE INTO Types (Type_id, Type) VALUES (?,?)", (i, typelst[i]))
     conn.commit()
 
 
@@ -123,4 +123,3 @@ def main():
 
 
 main()
-
