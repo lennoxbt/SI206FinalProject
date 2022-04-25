@@ -35,7 +35,7 @@ def getTypeRatingData(db_filename, label):
         typ = row[-1]
         rating = row[0]
 
-        if count.get(typ,None) == None:
+        if count.get(typ, None) == None:
             count[typ] = rating
             entry[typ] = 1
         else:
