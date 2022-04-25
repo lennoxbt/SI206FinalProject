@@ -10,7 +10,7 @@ import time
 # Define a business ID
 # business_id = '4AErMBEoNzbk7Q8g45kKaQ'
 
-def GetYelpRatings():
+def getYelpRatings():
     # This function gathers data from the yelp api, 20 items at a time. It accesses the restaurant names in the restaurant.csv file in order to 
     # pull multiple restaurant metrics from the api. This pulled data is then placed into the tables of the restaurantData.db 
     # database.
@@ -46,11 +46,10 @@ def GetYelpRatings():
             if 'businesses' in data.keys():
                 #print(json.dumps(data, indent = 3))
                 if data['businesses'] != []:
-                    yelp_rating = (data['businesses'][0]['rating'])
+                    Yelp_Rating = (data['businesses'][0]['rating'])
                 else:
-                    yelp_rating = 0
-               
-            #print(yelp_rating)
+                    Yelp_Rating = 0
+            #print(Yelp_Rating)
 
             cursor.execute("SELECT * FROM Types")
             for row in cursor:
@@ -59,6 +58,50 @@ def GetYelpRatings():
                     id = row[0]
             
             cursor.execute("UPDATE Restaurants SET Type_ID = ? WHERE Name = ?", (id, restaurantName))
-            cursor.execute("UPDATE Restaurants SET Yelp_Rating = ? WHERE Name = ?", (yelp_rating, restaurantName))
+            cursor.execute("UPDATE Restaurants SET Yelp_Rating = ? WHERE Name = ?", (id, restaurantName))
 
-GetYelpRatings()
+def yelp_csv(filename):
+    # This function takes in a csv filename as input, and selects data from the joined tables, Restaurants and Types. 
+    # This data is then used to calculate the average of the OpenTable and Yelp ratings for each restaurant.
+    # This calculation is then output into the yelp.csv file along with the restaurant name, gross, release date, and movie type.
+
+    header = ('Restaurant Name', 'Restaurant OpenHouse Rating', 'Restaurant Yelp Rating')
+
+    dbName ='restaurantData.db'
+    conn = sqlite3.connect(dbName)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM Restaurants JOIN Types ON Restaurants.typeid = Types.id WHERE OpenHouse_Rating != ? AND Yelp_Rating != ?', (0))
+    with open(filename, 'w', newline ='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+
+        for row in cursor:
+            opentable = row[-6]* 10
+            yelp = row[-5]
+            # print(row)
+            # print(opentable,yelp)
+
+            score = (float(opentable) + float(yelp))
+            avg = score//2
+            #print(avg,score)
+            ro = list(row)
+            #print(avgscore)
+            r = [ro[1],ro[2],avg]
+            #print(r)
+            writer.writerow(r)
+
+def main():
+    # This function calls the above functions, getYelpRatings and yelp_csv. In order to gather enough data from 
+    # the Yelp API, getYelpRatings is called within a for loop, multiple times.
+
+    # for i in range(1,11):
+    #     time.sleep(1)
+    #     getYelpRatings()
+    #     hm = (i*20)
+    #     print(str(hm) + ' Items Collected')
+    
+    # yelp_csv('yelp.csv')
+    pass
+
+main()
