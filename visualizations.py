@@ -59,12 +59,12 @@ def barchart_restaurant_ratings(restaurant_dict, name):
     first_font = {'family':'serif','color':'black','size':15}
     second_font = {'family':'serif','color':'black','size':12}
     
-    plt.figure(figsize = (10,12))
-    plt.bar(restaurant_types, restaurant_average_ratings, color = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson'])
-    plt.xlabel('Restaurant Type', fontdict = second_font)
-    plt.ylabel('Restaurant Average Ratings', fontdict = second_font)
-    plt.title('Average Rating per Restaurant Type', fontdict = first_font)
-    plt.xticks(rotation = 90)
+    plt.figure(figsize=(10,12))
+    plt.bar(restaurant_types, restaurant_average_ratings, color=['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson'])
+    plt.xlabel('Restaurant Type', fontdict=second_font)
+    plt.ylabel('Restaurant Average Ratings', fontdict=second_font)
+    plt.title('Average Rating per Restaurant Type', fontdict=first_font)
+    plt.xticks(rotation=90)
     plt.show()
     plt.savefig(name)
 
@@ -80,22 +80,22 @@ def barchart_restaurant_locations(restaurant_dict, name):
     first_font = {'family':'serif','color':'black','size':15}
     second_font = {'family':'serif','color':'black','size':12}
     
-    plt.figure(figsize = (10,12))
-    plt.bar(restaurant_types, restaurant_locations, color = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson'])
-    plt.xlabel('Restaurant Type', fontdict = second_font)
-    plt.ylabel('Restaurant Locations', fontdict = second_font)
-    plt.title('Most Common Restaurant Locations per Restaurant Type', fontdict = first_font)
-    plt.xticks(rotation = 90)
+    plt.figure(figsize=(10,12))
+    plt.bar(restaurant_types, restaurant_locations, color=['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson'])
+    plt.xlabel('Restaurant Type', fontdict=second_font)
+    plt.ylabel('Restaurant Locations', fontdict=second_font)
+    plt.title('Most Common Restaurant Locations per Restaurant Type', fontdict=first_font)
+    plt.xticks(rotation=90)
     plt.show()
     plt.savefig(name)
 
 def scatter_restaurants():
-    # This function takes no input, as it is designed to iterate through the ratings.csv file to create two dictionaries which contain 
-    # both the average critic rating and price for each restaurant. These dictionaries are then used to create a scatter plot, which compares 
-    # the average critic ratings and price for each restaurant, across both restaurant types.
+    # This function takes no input, as it is designed to iterate through the ratings.csv file to create two dictionaries, which contain 
+    # both the average rating and price for each restaurant. These dictionaries are then used to create a scatter plot, which compares 
+    # the average ratings and price for each restaurant across the 25 different restaurant types.
 
     path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path+'/movieData.db')
+    conn = sqlite3.connect(path+'/restaurantData.db')
     cur = conn.cursor()
 
     restaurant1 = {}
@@ -110,46 +110,71 @@ def scatter_restaurants():
             type = row[-1]
             price = row[-2]
             if int(type) == 0:
-                restaurant1[title] = [rating,price]
+                restaurant1[title] = [rating, price]
             else:
-                restaurant2[title] = [rating,price]
-    sortedm1 = sorted(restaurant1.values(), key = lambda x: x[0])
-    sortedm2 = sorted(restaurant2.values(), key = lambda x: x[0])
-    #print(sortedm1)
-    wratings = []
-    wprice = []
-    for key in sortedm1:
-        rating = key[0]
-        price = key[1]
-        wratings.append(rating)
-        wprice.append(price)
-    bratings = []
-    bprice = []
-    for key in sortedm2:
-        rating = key[0]
-        price = key[1]
-        bratings.append(rating)
-        bprice.append(price)
+                restaurant2[title] = [rating, price]
     
-    #print(wgross,wratings)
-    plt.figure(figsize=(11,6))
+    sortedr1 = sorted(restaurant1.values(), key = lambda x: x[0])
+    sortedr2 = sorted(restaurant2.values(), key = lambda x: x[0])
+    
+    opentable_ratings = []
+    opentable_price = []
+    yelp_ratings = []
+    yelp_price = []
 
-    plt.scatter(bratings,bprice, color='blue',marker='x',s=25,label='Black Restaurants',edgecolor='black')
-    plt.scatter(wratings,wprice, color='green',marker='o',s=25,label='White Restaurans',edgecolor='black')
-    plt.xticks(np.arange(len(bratings)),bratings, rotation=90)
+    for key in sortedr1:
+        rating = key[0]
+        price = key[1]
+        opentable_ratings.append(rating)
+        opentable_price.append(price)
+
+    for key in sortedr2:
+        rating = key[0]
+        price = key[1]
+        yelp_ratings.append(rating)
+        yelp_price.append(price)
+    
+    plt.figure(figsize=(11, 6))
+    
+    plt.scatter(opentable_ratings, opentable_price, color='red', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='green', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='blue', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='yellow', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='cyan', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='magenta', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='pink', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='orange', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='grey', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='purple', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='black', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='brown', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='olive', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='tomato', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='gold', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='wheat', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='aqua', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='coral', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='tan', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='fuchsia', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='lime', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='plum', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='navy', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+    plt.scatter(yelp_ratings, yelp_price, color='orchid', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
+    plt.scatter(opentable_ratings, opentable_price, color='crimson', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
+
+    plt.xticks(np.arange(len(yelp_ratings)), yelp_ratings, rotation=90)
     
     font1 = {'family':'serif','color':'black','size':20}
     font2 = {'family':'serif','color':'black','size':15}
-    plt.yscale('log')
-    plt.xlabel('Average Rating',fontdict = font2)
-    plt.ylabel('Price ($)',fontdict = font2)
-    plt.title('Price vs Average Rating',fontdict = font1)
+    # plt.yscale('log')
+    plt.xlabel('Average Rating', fontdict=font2)
+    plt.ylabel('Price ($)', fontdict=font2)
+    plt.title('Price vs Average Rating', fontdict=font1)
     plt.legend(loc="upper left")
     
     plt.savefig('ScatterGraph.jpeg')
     plt.tight_layout()
     plt.show()
-    pass
 
 def main():
     # This function calls the above functions, getTypeRatingData, barchart_restaurants, and scatter_restaurants to create the visuals needed 
@@ -167,6 +192,5 @@ def main():
     # scatter_restaurants()
     #barchart_restaurants(dictionaries)
     #scatter_restaurants(dictionaries)
-    pass
 
 main()
