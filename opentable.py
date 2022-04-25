@@ -64,7 +64,7 @@ def setUpRestaurantsTable(cur, conn, restaurantlst, x = 0):
   cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, Name TEXT, Type TEXT, Type_ID TEXT, Location TEXT, OpenTable_Rating FLOAT, Yelp_Rating FLOAT)")
   for num in range(len(restaurantlst)):
     id = num + x
-    cur.execute("INSERT INTO Restaurants (id, Name, Type, Location, opentable_rating) VALUES (?,?,?,?,?)", (id, restaurantlst[num][0], restaurantlst[num][1], restaurantlst[num][2], restaurantlst[num][3][:3]))
+    cur.execute("INSERT OR IGNORE INTO Restaurants (id, Name, Type, Location, opentable_rating) VALUES (?,?,?,?,?)", (id, restaurantlst[num][0], restaurantlst[num][1], restaurantlst[num][2], restaurantlst[num][3][:3]))
   conn.commit()
 
 # Create Types table is not exists
