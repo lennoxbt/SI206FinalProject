@@ -103,12 +103,6 @@ def setUpTypesTable(cur, conn, typelst):
         cur.execute("INSERT OR IGNORE INTO Types (Type_ID, Type) VALUES (?,?)", (i, typelst[i]))
     conn.commit()
 
-# Set-up for first visualization
-# def getTypeRatingData(conn):
-#     get_type_rating_data = "SELECT Type, AVG(rating) FROM Restaurants GROUP BY Type;"
-#     with conn:
-#         return conn.execute(get_type_rating_data).fetchall()
-
 # Setup database file
 def main():
 
@@ -120,7 +114,5 @@ def main():
 
   setUpRestaurantsTable(cur, conn, restaurant_tuple_lst, x = 0)
   setUpTypesTable(cur, conn, types)
-
-  # getTypeRatingData(conn)
 
 main()
