@@ -44,14 +44,15 @@ def getTypeRatingData(db_filename):
     print(type_average)
     return type_average
 
-def barchart_restaurant_ratings(restaurant_dict, name):
+# Visualization #1
+def barchart_restaurant_ratings(restaurant_dict1, name):
     # This function takes in a dictionary which contains restaurant types as the keys and average ratings as the values. It also takes 
     # in the preferred filename of the graph which will be returned. The function uses the dictionary to create and decorate a bar chart, 
     # which will compare the average ratings across restaurant types. The function will output a jpeg file, with the preferred name 
     # that was passed into the function.
 
-    restaurant_types = restaurant_dict.keys()
-    restaurant_average_ratings = restaurant_dict.values()
+    restaurant_types = restaurant_dict1.keys()
+    restaurant_average_ratings = restaurant_dict1.values()
     
     first_font = {'family':'serif','color':'black','size':15}
     second_font = {'family':'serif','color':'black','size':12}
@@ -104,14 +105,15 @@ def getTypePriceData(db_filename):
     print(type_average)
     return type_average
 
-def barchart_restaurant_prices(restaurant_dict, name):
+# Visualization #2
+def barchart_restaurant_prices(restaurant_dict2, name):
     # This function takes in a dictionary which contains restaurant types as the keys and locations as the values. It also takes 
     # in the preferred filename of the graph which will be returned. The function uses the dictionary to create and decorate a bar chart, 
     # which will compare the prices across restaurant types. The function will output a jpeg file, with the preferred name
     # that was passed into the function.
 
-    restaurant_types = restaurant_dict.keys()
-    restaurant_average_prices = restaurant_dict.values()
+    restaurant_types = restaurant_dict2.keys()
+    restaurant_average_prices = restaurant_dict2.values()
     
     first_font = {'family':'serif','color':'black','size':15}
     second_font = {'family':'serif','color':'black','size':12}
@@ -125,6 +127,110 @@ def barchart_restaurant_prices(restaurant_dict, name):
     plt.show()
     plt.savefig(name)
 
+# Visualization #3
+def piechart_restaurant_types():
+    dbName ='restaurantData.db'
+    conn = sqlite3.connect(dbName)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM Restaurants")
+    AfghanNumber = 0
+    AmericanNumber = 0
+    ContemporaryAmericanNumber = 0
+    ContemporaryFrenchNumber = 0
+    ContemporarySouthernNumber = 0
+    CroatianNumber = 0
+    FarmtotableNumber = 0
+    FishNumber = 0
+    FrenchAmericanNumber = 0
+    FrenchNumber = 0
+    FusionNumber = 0
+    GreekNumber = 0
+    ItalianNumber = 0
+    MediterraneanNumber = 0
+    MexicanNumber = 0
+    PeruvianNumber = 0
+    SeafoodNumber = 0
+    SouthwestNumber = 0
+    SpeakeasyNumber = 0
+    SteakNumber = 0
+    SteakhouseNumber = 0
+    SushiNumber = 0
+    TapasSmallPlatesNumber = 0
+    TraditionalFrenchNumber = 0
+    VietnameseNumber = 0
+    WineryNumber = 0
+    for row in cursor:
+        if row[2] == 'Afghan':
+            AfghanNumber += 1
+        elif row[2] == 'American':
+            AmericanNumber += 1
+        elif row[2] == 'Contemporary American':
+            ContemporaryAmericanNumber += 1
+        elif row[2] == 'Contemporary French':
+            ContemporaryFrenchNumber += 1
+        elif row[2] == 'Contemporary Southern':
+            ContemporarySouthernNumber += 1
+        elif row[2] == 'Croatian':
+            CroatianNumber+= 1
+        elif row[2] == 'Farm-to-table':
+            FarmtotableNumber += 1
+        elif row[2] == 'Fish':
+            FishNumber+= 1
+        elif row[2] == 'French American':
+            FrenchAmericanNumber+= 1
+        elif row[2] == 'French':
+            FrenchNumber += 1
+        elif row[2] == 'Fusion':
+            FusionNumber += 1
+        elif row[2] == 'Greek':
+            GreekNumber += 1
+        elif row[2] == 'Italian':
+            ItalianNumber += 1
+        elif row[2] == 'Mediterranean':
+            MediterraneanNumber += 1
+        elif row[2] == 'Mexican':
+            MexicanNumber += 1
+        elif row[2] == 'Peruvian':
+            PeruvianNumber += 1
+        elif row[2] == 'Seafood':
+            SeafoodNumber += 1
+        elif row[2] == 'Southwest':
+            SouthwestNumber += 1
+        elif row[2] == 'Speakeasy':
+            SpeakeasyNumber += 1
+        elif row[2] == 'Steak':
+            SteakNumber += 1
+        elif row[2] == 'Steakhouse':
+            SteakhouseNumber += 1
+        elif row[2] == 'Sushi':
+            SushiNumber += 1
+        elif row[2] == 'Tapas / Small Plates':
+            TapasSmallPlatesNumber += 1
+        elif row[2] == 'Traditional French':
+            TraditionalFrenchNumber += 1
+        elif row[2] == 'Vietnamese':
+            VietnameseNumber += 1
+        elif row[2] == 'Winery':
+            WineryNumber += 1
+    
+    names = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French American', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
+    size_of_groups=[AfghanNumber, AmericanNumber, ContemporaryAmericanNumber, ContemporaryFrenchNumber, ContemporarySouthernNumber, CroatianNumber, FarmtotableNumber, FishNumber, FrenchAmericanNumber, FrenchNumber, FusionNumber, GreekNumber, ItalianNumber, MediterraneanNumber, MexicanNumber, PeruvianNumber, SeafoodNumber, SouthwestNumber, SpeakeasyNumber, SteakNumber,SteakhouseNumber, SushiNumber, TapasSmallPlatesNumber, TraditionalFrenchNumber, VietnameseNumber, WineryNumber]
+    colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson', 'teal']
+    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
+    plt.legend(patches, names, loc="best")
+    plt.axis('equal')
+    plt.tight_layout()
+    plt.pie(size_of_groups)
+    fig = plt.gcf()
+    fig.set_size_inches(8,15)
+    plt.show()
+  
+    # plt.pie(size_of_groups, labels=names, labeldistance=1.15)
+    # plt.title('Percentage of Types in OpenTable Website', fontdict=first_font)
+    # plt.show()
+
+# Visualization #4
 # # def scatter_restaurants():
 # #     # This function takes no input, as it is designed to iterate through the ratings.csv file to create two dictionaries, which contain 
 # #     # both the average rating and price for each restaurant. These dictionaries are then used to create a scatter plot, which compares 
@@ -213,32 +319,14 @@ def barchart_restaurant_prices(restaurant_dict, name):
 # #     plt.show()
 
 # def main():
-#     # This function calls the above functions, getTypeRatingData, barchart_restaurants, and scatter_restaurants to create the visuals needed 
-#     # to compare and analyze the collected data.
+#     rating = getTypeRatingData('restaurantData.db')
+#     price = getTypePriceData('restaurantData.db')
 
-#     getTypeRatingData
-#     barchart_restaurant_ratings
-#     # barchart_restaurant_locations
-#     # scatter_restaurants
-
-#     # whitem = getTypeRatingData('restaurantData.db',0)
-#     # blackm = getTypeRatingData('restaurantData.db',1)
-#     # barchart_restaurants(blackm,'BarChartBlackRestaurants.jpeg')
-#     # barchart_restaurants(whitem,'BarChartWhiteRestaurants.jpeg')
-#     # scatter_restaurants()
-#     #barchart_restaurants(dictionaries)
-#     #scatter_restaurants(dictionaries)
-# def main():
-#     opentable_ratings_types('restaurant.csv')
-# #     visualizations_voo(cur,conn)
-# #     hot_stock_vis(cur,conn)
-# #     data2vis('data2.csv')
-
-# if __name__ == "__main__":
-#     main()
+#     barchart_restaurant_ratings(rating, 'Restaurant Ratings Per Type.jpeg')
+#     barchart_restaurant_prices(price, 'Restaurants Prices Per Type.jpeg')
+# main()
 
 getTypeRatingData('restaurantData.db')
-
-barchart_restaurant_ratings(getTypeRatingData('restaurantData.db'), "Restaurant Ratings Per Type")
-
-barchart_restaurant_prices(getTypePriceData('restaurantData.db'), "Restaurants Prices Per Type")
+barchart_restaurant_ratings(getTypeRatingData('restaurantData.db'), "Restaurant Ratings Per Type.jpeg")
+barchart_restaurant_prices(getTypePriceData('restaurantData.db'), "Restaurants Prices Per Type.jpeg")
+piechart_restaurant_types()
