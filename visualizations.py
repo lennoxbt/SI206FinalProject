@@ -7,9 +7,6 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.lib.function_base import average
-import opentable
-import visualizations
-
 import requests
 import re
 import csv
