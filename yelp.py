@@ -15,7 +15,7 @@ def getYelpRatings():
     # pull multiple restaurant metrics from the api. This pulled data is then placed into the tables of the restaurantData.db 
     # database.
 
-    api_key = 'MG1W3tSf9JH2M0wgcH8WF57_7OW8wGBb6JjTFUxQ4YoXdvZkpmuBjNcydtePtFZISQlpXxnktL7DAiBKaOi2zwv9EwXC-0xb9FG9HeHGLTaBwnnV-75rN9qU7FtmYnYx'
+    api_key = 'OP7cfO8hvRHG4xM1GUusN1i3VLGPR49ih-GAizx_L_K6bK4cuIVz6gVeksghyZR_23E1mOJuLT3hPijs1IDAhpSG956IaPh6cpUxsDT1Hi4Rbh6vzftOEdrfjghoYnYx'
     ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
     rest_rows = []
 
@@ -93,20 +93,20 @@ def yelp_csv(filename):
     conn = sqlite3.connect(dbName)
     cursor = conn.cursor()
     
-    # cursor.execute('SELECT * FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID WHERE OpenTable_Rating != ? AND Yelp_Rating != ?', (0,0))
+    cursor.execute('SELECT * FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID WHERE OpenTable_Rating != ? AND Yelp_Rating != ?', (0,0))
     with open(filename, 'w', newline ='') as file:
         writer = csv.writer(file)
         writer.writerow(header)
 
         for row in cursor:
             opentable_rating = row[5]
-            yelp_rating = row[6]
-            # print(row)
+            yelp_rating = row[7]
+            print(row)
             # print(opentable_rating,yelp_rating)
             score = (float(opentable_rating) + float(yelp_rating))
             avg = score/2
             ro = [row[1], avg]
-            print(ro)
+            # print(ro)
             writer.writerow(ro)
 
 def main():
