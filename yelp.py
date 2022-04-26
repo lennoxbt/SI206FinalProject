@@ -4,9 +4,6 @@ import csv
 import json
 import sqlite3
 import time
-import opentable
-import visualizations
-import matplotlib.pyplot as plt
 
 #Business Search      URL -- 'https://api.yelp.com/v3/businesses/search'
 
@@ -103,13 +100,8 @@ def yelp_csv(filename):
             score = (float(opentable_rating) + float(yelp_rating))
             avg = score/2
             ro = [row[1], avg]
-            print(ro)
+            # print(ro)
             writer.writerow(ro)
-
-# def type_rating_vis(conn):
-#     type_rating_data = opentable.getTypeRatingData(conn)
-#     visualizations.Type_Rating_Vis(type_rating_data)
-#     plt.show()
 
 def main():
     # This function calls the above functions, getYelpRatings and yelp_csv. In order to gather enough data from 
