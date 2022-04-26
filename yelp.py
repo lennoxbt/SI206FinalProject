@@ -21,15 +21,18 @@ def getYelpRatings():
 
     with open('restaurant.csv', 'r') as file:
         reader = csv.reader(file)
-        count = 0
+        
         dbName ='restaurantData.db'
         conn = sqlite3.connect(dbName)
         cursor = conn.cursor()
         next(reader)
-
+        count = 0
         for row in reader:
+            # if count > 20:
+            #     print('got 20, restart for more')
+            #     break
             # count += 1
-            print(row)
+            # print(row)
             restaurantName = row[0]
             restaurantType = row[1]
             restaurantLocation = row[2]
@@ -65,16 +68,19 @@ def getYelpRatings():
             conn.commit()
             cursor.execute("UPDATE Restaurants SET Yelp_Price = ? WHERE Name = ?", (yelp_Price, restaurantName))
             conn.commit()
+            
+            count += 1
 
             # cursor.execute("SELECT * FROM Restaurants")
             # for row in cursor:
             #     id = row[0]
             #     #print(row)
-
-            # if rest_rows:
-            #     with open('restaurant.csv', 'w') as file:    
-            #         writer = csv.writer(file)
-            #         writer.writerows(rest_rows)
+        
+        # conn.commit()
+        # if rest_rows:
+        #     with open('restaurant.csv', 'w') as file:    
+        #         writer = csv.writer(file)
+        #         writer.writerows(rest_rows)
 
 def yelp_csv(filename):
     # This function takes in a csv filename as input, and selects data from the joined tables, Restaurants and Types. 
@@ -100,14 +106,14 @@ def yelp_csv(filename):
             score = (float(opentable_rating) + float(yelp_rating))
             avg = score/2
             ro = [row[1], avg]
-            # print(ro)
+            print(ro)
             writer.writerow(ro)
 
 def main():
     # This function calls the above functions, getYelpRatings and yelp_csv. In order to gather enough data from 
     # the Yelp API, getYelpRatings is called within a for loop, multiple times.
     
-    # for i in range(1,11):
+    # for i in range(1,6):
     #     time.sleep(1)
     #     getYelpRatings()
     #     hm = (i*20)
