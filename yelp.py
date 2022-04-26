@@ -47,8 +47,8 @@ def GetYelpRatings():
                 #print(yelp_rating)
             cursor.execute("UPDATE Restaurants SET Yelp_rating = ? WHERE Name = ?", (yelp_rating, restaurantName))
             conn.commit()
-            cursor.execute('UPDATE Restaurants SET Type_id = (SELECT b.Type_id  FROM Restaurants a left JOIN Types b on a.Type = b.Type)')
-
+            cursor.execute('UPDATE Restaurants SET type_id=(select type_id from Types WHERE Types.type=Restaurants.type)')
+            #'UPDATE Restaurants SET type_id=(select type_id from Types WHERE Types.type=Restaurants.type)'
             conn.commit()
         
 
