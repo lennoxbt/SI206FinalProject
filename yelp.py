@@ -79,9 +79,9 @@ def getYelpRatings():
 
                 # print(yelp_Rating)
             
-            cursor.execute('UPDATE Restaurants SET Type_ID=(select Type_ID from Types WHERE Types.Type=Restaurants.Type)')
+            #cursor.execute('UPDATE Restaurants SET Type_ID=(select Type_ID from Types WHERE Types.Type=Restaurants.Type)')
             #'UPDATE Restaurants SET type_id=(select type_id from Types WHERE Types.type=Restaurants.type)'
-            conn.commit()
+            #conn.commit()
             cursor.execute("UPDATE Restaurants SET Yelp_Rating = ? WHERE Name = ?", (yelp_Rating, restaurantName))
             conn.commit()
             cursor.execute("UPDATE Restaurants SET Yelp_Price = ? WHERE Name = ?", (yelp_Price, restaurantName))
@@ -113,20 +113,21 @@ def yelp_csv(filename):
     conn = sqlite3.connect(dbName)
     cursor = conn.cursor()
     
-    cursor.execute('SELECT * FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID WHERE OpenTable_Rating != ? AND Yelp_Rating != ?', (0,0))
+    cursor.execute('SELECT Restaurants.Name, Restaurants.OpenTable_Rating, Restaurants.Yelp_Rating FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID WHERE OpenTable_Rating != ? AND Yelp_Rating != ?', (0,0))
     with open(filename, 'w', newline ='') as file:
         writer = csv.writer(file)
         writer.writerow(header)
 
         for row in cursor:
-            opentable_rating = row[5]
-            yelp_rating = row[7]
+            print(row)
+            opentable_rating = row[1]
+            yelp_rating = row[2]
             #print(row)
             # print(opentable_rating,yelp_rating)
             score = (float(opentable_rating) + float(yelp_rating))
             avg = score/2
-            ro = [row[1], avg]
-            # print(ro)
+            ro = [row[0], avg]
+            print(ro)
             writer.writerow(ro)
 
 def main():
