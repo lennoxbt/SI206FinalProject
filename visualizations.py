@@ -26,7 +26,7 @@ def getTypeRatingData(db_filename):
     count = {}
     entry = {}
 
-    cur.execute('SELECT Restaurants.OpenTable_Rating, Restaurants.Type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID')
+    cur.execute('SELECT Restaurants.OpenTable_Rating, Types.Type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID')
     for row in cur:
         type = row[-1]
         rating = row[0]
@@ -80,7 +80,7 @@ def getTypePriceData(db_filename):
     entry = {}
 
     # here we would change to Types.Type*
-    cur.execute('SELECT Restaurants.OpenTable_Price, Restaurants.Type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID')
+    cur.execute('SELECT Restaurants.OpenTable_Price, Types.Type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID')
     for row in cur:
         type = row[-1]
         if row[0] == "$":
@@ -138,7 +138,8 @@ def piechart_restaurant_types():
     cursor = conn.cursor()
     chart_font = {'family':'serif','color':'black','size':15}
 
-    cursor.execute("SELECT * FROM Restaurants")
+    cursor.execute("SELECT * FROM Types")
+    
     AfghanNumber = 0
     AmericanNumber = 0
     ContemporaryAmericanNumber = 0
@@ -166,75 +167,72 @@ def piechart_restaurant_types():
     VietnameseNumber = 0
     WineryNumber = 0
     for row in cursor:
-        if row[2] == 'Afghan':
+        print(row)
+        if row[1] == 'Afghan':
             AfghanNumber += 1
-        elif row[2] == 'American':
+        elif row[1] == 'American':
             AmericanNumber += 1
-        elif row[2] == 'Contemporary American':
+        elif row[1] == 'Contemporary American':
             ContemporaryAmericanNumber += 1
-        elif row[2] == 'Contemporary French':
+        elif row[1] == 'Contemporary French':
             ContemporaryFrenchNumber += 1
-        elif row[2] == 'Contemporary Southern':
+        elif row[1] == 'Contemporary Southern':
             ContemporarySouthernNumber += 1
-        elif row[2] == 'Croatian':
+        elif row[1] == 'Croatian':
             CroatianNumber+= 1
-        elif row[2] == 'Farm-to-table':
+        elif row[1] == 'Farm-to-table':
             FarmtotableNumber += 1
-        elif row[2] == 'Fish':
+        elif row[1] == 'Fish':
             FishNumber+= 1
-        elif row[2] == 'French American':
+        elif row[1] == 'French American':
             FrenchAmericanNumber+= 1
-        elif row[2] == 'French':
+        elif row[1] == 'French':
             FrenchNumber += 1
-        elif row[2] == 'Fusion':
+        elif row[1] == 'Fusion':
             FusionNumber += 1
-        elif row[2] == 'Greek':
+        elif row[1] == 'Greek':
             GreekNumber += 1
-        elif row[2] == 'Italian':
+        elif row[1] == 'Italian':
             ItalianNumber += 1
-        elif row[2] == 'Mediterranean':
+        elif row[1] == 'Mediterranean':
             MediterraneanNumber += 1
-        elif row[2] == 'Mexican':
+        elif row[1] == 'Mexican':
             MexicanNumber += 1
-        elif row[2] == 'Peruvian':
+        elif row[1] == 'Peruvian':
             PeruvianNumber += 1
-        elif row[2] == 'Seafood':
+        elif row[1] == 'Seafood':
             SeafoodNumber += 1
-        elif row[2] == 'Southwest':
+        elif row[1] == 'Southwest':
             SouthwestNumber += 1
-        elif row[2] == 'Speakeasy':
+        elif row[1] == 'Speakeasy':
             SpeakeasyNumber += 1
-        elif row[2] == 'Steak':
+        elif row[1] == 'Steak':
             SteakNumber += 1
-        elif row[2] == 'Steakhouse':
+        elif row[1] == 'Steakhouse':
             SteakhouseNumber += 1
-        elif row[2] == 'Sushi':
+        elif row[1] == 'Sushi':
             SushiNumber += 1
-        elif row[2] == 'Tapas / Small Plates':
+        elif row[1] == 'Tapas / Small Plates':
             TapasSmallPlatesNumber += 1
-        elif row[2] == 'Traditional French':
+        elif row[1] == 'Traditional French':
             TraditionalFrenchNumber += 1
-        elif row[2] == 'Vietnamese':
+        elif row[1] == 'Vietnamese':
             VietnameseNumber += 1
-        elif row[2] == 'Winery':
+        elif row[1] == 'Winery':
             WineryNumber += 1
     
     names = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French American', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
     size_of_groups=[AfghanNumber, AmericanNumber, ContemporaryAmericanNumber, ContemporaryFrenchNumber, ContemporarySouthernNumber, CroatianNumber, FarmtotableNumber, FishNumber, FrenchAmericanNumber, FrenchNumber, FusionNumber, GreekNumber, ItalianNumber, MediterraneanNumber, MexicanNumber, PeruvianNumber, SeafoodNumber, SouthwestNumber, SpeakeasyNumber, SteakNumber,SteakhouseNumber, SushiNumber, TapasSmallPlatesNumber, TraditionalFrenchNumber, VietnameseNumber, WineryNumber]
     colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson', 'teal']
-    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90, autopct=lambda x: f'{x:.1f}%\n({(x/100)*sum(size_of_groups):.0f})')
+    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
     plt.legend(patches, names, loc="best")
-    plt.axis('equal')
+    # plt.axis('equal')
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
     fig.set_size_inches(8,15)
     plt.title('Percentage of Types in List of Restaurants', fontdict=chart_font)
     plt.show()
-  
-    # plt.pie(size_of_groups, labels=names, labeldistance=1.15)
-    # plt.title('Percentage of Types in OpenTable Website', fontdict=first_font)
-    # plt.show()
 
 # Visualization #4
 def piechart_restaurant_prices():
@@ -252,13 +250,14 @@ def piechart_restaurant_prices():
     Price3Number = 0
     Price4Number = 0
     for row in cursor:
-        if row[6] == '$':
+        print(row)
+        if row[5] == '$':
             Price1Number += 1
-        elif row[6] == '$$':
+        elif row[5] == '$$':
             Price2Number += 1
-        elif row[6] == '$$$':
+        elif row[5] == '$$$':
             Price3Number += 1
-        elif row[6] == '$$$$':
+        elif row[5] == '$$$$':
             Price4Number += 1
     
     names = ['Least Expensive', 'Second Least Expensive', 'Second Most Expensive', 'Most Expensive']
@@ -266,7 +265,7 @@ def piechart_restaurant_prices():
     colors = ['red', 'orange', 'green', 'blue']
     patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
     plt.legend(patches, names, loc="best")
-    plt.axis('equal')
+    # plt.axis('equal')
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
