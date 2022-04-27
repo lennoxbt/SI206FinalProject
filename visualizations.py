@@ -130,15 +130,16 @@ def barchart_restaurant_prices(restaurant_dict2, name):
 
 # Visualization #3
 def piechart_restaurant_types():
-    # Description
-    # Description
+    # This function takes no parameters. The function connects to our database and uses a SELECT statement to select all the columns
+    # from the Restaurants table. It then iterates through every row in the Restaurants table to track how many restaurants belong to each 
+    # category type. It then creates a pie chart depicting the breakdown of percentage for each category (the category is the Type of Restaurant).
 
     dbName ='restaurantData.db'
     conn = sqlite3.connect(dbName)
     cursor = conn.cursor()
     chart_font = {'family':'serif','color':'black','size':15}
 
-    cursor.execute("SELECT * FROM Types")
+    cursor.execute("SELECT * FROM Restaurants")
     
     AfghanNumber = 0
     AmericanNumber = 0
@@ -168,57 +169,57 @@ def piechart_restaurant_types():
     WineryNumber = 0
     for row in cursor:
         print(row)
-        if row[1] == 'Afghan':
+        if row[2] == '1':
             AfghanNumber += 1
-        elif row[1] == 'American':
+        elif row[2] == '2':
             AmericanNumber += 1
-        elif row[1] == 'Contemporary American':
+        elif row[2] == '3':
             ContemporaryAmericanNumber += 1
-        elif row[1] == 'Contemporary French':
+        elif row[2] == '4':
             ContemporaryFrenchNumber += 1
-        elif row[1] == 'Contemporary Southern':
+        elif row[2] == '5':
             ContemporarySouthernNumber += 1
-        elif row[1] == 'Croatian':
+        elif row[2] == '6':
             CroatianNumber+= 1
-        elif row[1] == 'Farm-to-table':
+        elif row[2] == '7':
             FarmtotableNumber += 1
-        elif row[1] == 'Fish':
+        elif row[2] == '8':
             FishNumber+= 1
-        elif row[1] == 'French American':
+        elif row[2] == '9':
             FrenchAmericanNumber+= 1
-        elif row[1] == 'French':
+        elif row[2] == '10':
             FrenchNumber += 1
-        elif row[1] == 'Fusion':
+        elif row[2] == '11':
             FusionNumber += 1
-        elif row[1] == 'Greek':
+        elif row[2] == '12':
             GreekNumber += 1
-        elif row[1] == 'Italian':
+        elif row[2] == '13':
             ItalianNumber += 1
-        elif row[1] == 'Mediterranean':
+        elif row[2] == '14':
             MediterraneanNumber += 1
-        elif row[1] == 'Mexican':
+        elif row[2] == '15':
             MexicanNumber += 1
-        elif row[1] == 'Peruvian':
+        elif row[2] == '16':
             PeruvianNumber += 1
-        elif row[1] == 'Seafood':
+        elif row[2] == '17':
             SeafoodNumber += 1
-        elif row[1] == 'Southwest':
+        elif row[2] == '18':
             SouthwestNumber += 1
-        elif row[1] == 'Speakeasy':
+        elif row[2] == '19':
             SpeakeasyNumber += 1
-        elif row[1] == 'Steak':
+        elif row[2] == '20':
             SteakNumber += 1
-        elif row[1] == 'Steakhouse':
+        elif row[2] == '21':
             SteakhouseNumber += 1
-        elif row[1] == 'Sushi':
+        elif row[2] == '22':
             SushiNumber += 1
-        elif row[1] == 'Tapas / Small Plates':
+        elif row[2] == '23':
             TapasSmallPlatesNumber += 1
-        elif row[1] == 'Traditional French':
+        elif row[2] == '24':
             TraditionalFrenchNumber += 1
-        elif row[1] == 'Vietnamese':
+        elif row[2] == '25':
             VietnameseNumber += 1
-        elif row[1] == 'Winery':
+        elif row[2] == '26':
             WineryNumber += 1
     
     names = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French American', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
@@ -226,18 +227,20 @@ def piechart_restaurant_types():
     colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson', 'teal']
     patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
     plt.legend(patches, names, loc="best")
-    # plt.axis('equal')
+    plt.axis('equal')
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
-    fig.set_size_inches(8,15)
+    fig.set_size_inches(6,10)
     plt.title('Percentage of Types in List of Restaurants', fontdict=chart_font)
     plt.show()
 
 # Visualization #4
 def piechart_restaurant_prices():
-    # Description
-    # Description
+    # This function takes no parameters. The function connects to our database and uses a SELECT statement to select all the columns
+    # from the Restaurants table. It then iterates through every row in Restaurants to track how expensive each restaurant is based on
+    # type, ranging from one dollar sign ($) to four ($$$$). After this, we created a pie chart depicting the breakdown of percentages
+    # for each category, $ being least expensive and $$$$ most expensive.
 
     dbName ='restaurantData.db'
     conn = sqlite3.connect(dbName)
@@ -250,7 +253,7 @@ def piechart_restaurant_prices():
     Price3Number = 0
     Price4Number = 0
     for row in cursor:
-        print(row)
+        #print(row)
         if row[5] == '$':
             Price1Number += 1
         elif row[5] == '$$':
@@ -265,7 +268,7 @@ def piechart_restaurant_prices():
     colors = ['red', 'orange', 'green', 'blue']
     patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
     plt.legend(patches, names, loc="best")
-    # plt.axis('equal')
+    plt.axis('equal')
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
