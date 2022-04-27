@@ -23,7 +23,6 @@ def restaurantlst(url):
 
     spans = soup.find_all(class_='CCbGHaorgGHXgJqoOaXl')
 
-
     count = 0
     for item in spans:
       restaurantName = item.find('h2', class_='H5kqSXUFObkmV6wfAw7p').text
@@ -86,15 +85,21 @@ def setUpDatabase(db_name):
    return cur, conn
 
 # Create Restaurants table if does not exist
-def setUpRestaurantsTable(cur, conn, restaurantlst, x = 0):
+def setUpRestaurantsTable(cur, conn, restaurantlst, types, x = 0):
   # This takes a database cursor and conneciton, list of restaurant names, restaurant type, and optional 
   # argument, which specifies the starting position of the database ID. The function creates a table, Restaurants, 
   # within the passed database and inserts each restaurant in restaurantlst, along with its corresponding ID, location, and type.
-  
-  cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, Name TEXT, Type TEXT, Type_ID TEXT, Location TEXT, OpenTable_Rating FLOAT, OpenTable_Price TEXT, Yelp_Rating FLOAT, Yelp_Price TEXT)")
+
+  cur.execute("CREATE TABLE IF NOT EXISTS Restaurants (id INTEGER PRIMARY KEY, Name TEXT, Type_ID TEXT, Location TEXT, OpenTable_Rating FLOAT, OpenTable_Price TEXT, Yelp_Rating FLOAT, Yelp_Price TEXT)")
+  # print(types)
   for num in range(len(restaurantlst)):
+    print(restaurantlst[num][1])
+    try:
+      type_id = types.index(restaurantlst[num][1])
+    except:
+      type_id = '999'
     id = num + x
-    cur.execute("INSERT OR IGNORE INTO Restaurants (id, Name, Type, Location, OpenTable_Rating, OpenTable_Price) VALUES (?,?,?,?,?,?)", (id, restaurantlst[num][0], restaurantlst[num][1], restaurantlst[num][2], restaurantlst[num][3], restaurantlst[num][4]))
+    cur.execute("INSERT OR IGNORE INTO Restaurants (id, Name, Type_ID, Location, OpenTable_Rating, OpenTable_Price) VALUES (?,?,?,?,?,?)", (id, restaurantlst[num][0], type_id, restaurantlst[num][2], restaurantlst[num][3], restaurantlst[num][4]))
     
   conn.commit()
 
@@ -117,9 +122,10 @@ def main():
   restaurant_tuple_lst = restaurantlst('https://www.opentable.com/lists/top-100-2021')
   types = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French American', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
   
+  
   write_csv(restaurant_tuple_lst, 'restaurant.csv')
 
-  setUpRestaurantsTable(cur, conn, restaurant_tuple_lst, x = 0)
+  setUpRestaurantsTable(cur, conn, restaurant_tuple_lst,types, x = 0)
   setUpTypesTable(cur, conn, types)
 
 main()
