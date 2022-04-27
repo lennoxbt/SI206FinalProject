@@ -1,9 +1,14 @@
+# Winter 2022 Final Project
+# SI 206
+# Name: Lennox Thomas & Nicole Surcel
+
 import requests
 import re
 import csv
 import json
 import sqlite3
 import time
+
 
 #Business Search      URL -- 'https://api.yelp.com/v3/businesses/search'
 
@@ -18,16 +23,28 @@ def getYelpRatings():
     api_key = 'OP7cfO8hvRHG4xM1GUusN1i3VLGPR49ih-GAizx_L_K6bK4cuIVz6gVeksghyZR_23E1mOJuLT3hPijs1IDAhpSG956IaPh6cpUxsDT1Hi4Rbh6vzftOEdrfjghoYnYx'
     ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
     rest_rows = []
-
+    my_file = 'count.txt'
+    my_file = open(my_file, "r")
+    count = my_file.readlines()
+    my_file.close()
     with open('restaurant.csv', 'r') as file:
         reader = csv.reader(file)
-        
+    
+        # AYMAN'S ADDITION
+        #==================
+        print(count)
+        count = int(count[0])
+        ind = count%4
+        reader1=[row for idx, row in enumerate(reader) if idx in range(25*ind+1,25*(ind+1)+1)]
+        #==================
+        # END OF AYMAN'S ADDITION
         dbName ='restaurantData.db'
         conn = sqlite3.connect(dbName)
         cursor = conn.cursor()
-        next(reader)
-        count = 0
-        for row in reader:
+        #next(reader)
+
+        objects = []
+        for row in reader1:
             # if count > 20:
             #     print('got 20, restart for more')
             #     break
@@ -38,17 +55,18 @@ def getYelpRatings():
             restaurantLocation = row[2]
             # restaurantYelpRating = row[3]
             id = 0
-
+            
             parameters = {'term': restaurantName, 'location': restaurantLocation, 'categories': 'restaurants', 'limit': 1}
             HEADERS = {'Authorization': 'bearer %s' % api_key}
+            print(restaurantName)
             response_obj = requests.get(url = ENDPOINT, params = parameters, headers = HEADERS)
             data = response_obj.json()
-            #print(data['businesses'][0])
-            #print(data.keys())
-            #print(type(data.keys()))
+            # print(data['businesses'][0])
+            # print(data.keys())
+            # print(type(data.keys()))
 
             if 'businesses' in data.keys():
-                #print(json.dumps(data, indent = 3))
+                # print(json.dumps(data, indent = 3))
                 if data['businesses'] != []:
                     # print(json.dumps(data['businesses'][0]['price'], indent = 3))
                     yelp_Rating = (data['businesses'][0]['rating'])
@@ -75,7 +93,9 @@ def getYelpRatings():
             # for row in cursor:
             #     id = row[0]
             #     #print(row)
-        
+        my_file = open("count.txt", "w")
+        my_file.write(str(count))
+        my_file.close()
         # conn.commit()
         # if rest_rows:
         #     with open('restaurant.csv', 'w') as file:    
@@ -101,7 +121,7 @@ def yelp_csv(filename):
         for row in cursor:
             opentable_rating = row[5]
             yelp_rating = row[7]
-            print(row)
+            #print(row)
             # print(opentable_rating,yelp_rating)
             score = (float(opentable_rating) + float(yelp_rating))
             avg = score/2
@@ -113,10 +133,11 @@ def main():
     # This function calls the above functions, getYelpRatings and yelp_csv. In order to gather enough data from 
     # the Yelp API, getYelpRatings is called within a for loop, multiple times.
     
-    # for i in range(1,6):
+    # The for loop below allows for the "Yelp" API data to be collected and placed within the database 25 items at a time, with one execution/run
+    # for i in range(1,5):
     #     time.sleep(1)
     #     getYelpRatings()
-    #     hm = (i*20)
+    #     hm = (i*25)
     #     print(str(hm) + ' Items Collected')
 
     getYelpRatings()  
