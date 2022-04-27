@@ -231,7 +231,7 @@ def piechart_restaurant_types():
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
-    fig.set_size_inches(6,10)
+    fig.set_size_inches(6,15)
     plt.title('Percentage of Types in List of Restaurants', fontdict=chart_font)
     plt.show()
 
