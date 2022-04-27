@@ -79,6 +79,7 @@ def getTypePriceData(db_filename):
     count = {}
     entry = {}
 
+    # here we would change to Types.Type*
     cur.execute('SELECT Restaurants.OpenTable_Price, Restaurants.Type FROM Restaurants JOIN Types ON Restaurants.Type_ID = Types.Type_ID')
     for row in cur:
         type = row[-1]
@@ -129,9 +130,13 @@ def barchart_restaurant_prices(restaurant_dict2, name):
 
 # Visualization #3
 def piechart_restaurant_types():
+    # Description
+    # Description
+
     dbName ='restaurantData.db'
     conn = sqlite3.connect(dbName)
     cursor = conn.cursor()
+    chart_font = {'family':'serif','color':'black','size':15}
 
     cursor.execute("SELECT * FROM Restaurants")
     AfghanNumber = 0
@@ -217,13 +222,14 @@ def piechart_restaurant_types():
     names = ['Afghan', 'American', 'Contemporary American', 'Contemporary French', 'Contemporary Southern', 'Croatian', 'Farm-to-table', 'Fish', 'French American', 'French', 'Fusion / Eclectic', 'Greek', 'Italian', 'Mediterranean', 'Mexican', 'Peruvian', 'Seafood', 'Southwest', 'Speakeasy', 'Steak', 'Steakhouse', 'Sushi', 'Tapas / Small Plates', 'Traditional French', 'Vietnamese', 'Winery']
     size_of_groups=[AfghanNumber, AmericanNumber, ContemporaryAmericanNumber, ContemporaryFrenchNumber, ContemporarySouthernNumber, CroatianNumber, FarmtotableNumber, FishNumber, FrenchAmericanNumber, FrenchNumber, FusionNumber, GreekNumber, ItalianNumber, MediterraneanNumber, MexicanNumber, PeruvianNumber, SeafoodNumber, SouthwestNumber, SpeakeasyNumber, SteakNumber,SteakhouseNumber, SushiNumber, TapasSmallPlatesNumber, TraditionalFrenchNumber, VietnameseNumber, WineryNumber]
     colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'pink', 'orange', 'grey', 'purple', 'black', 'brown', 'olive', 'tomato', 'gold', 'wheat', 'aqua', 'coral', 'tan', 'fuchsia', 'lime', 'plum', 'navy', 'orchid', 'crimson', 'teal']
-    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
+    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90, autopct=lambda x: f'{x:.1f}%\n({(x/100)*sum(size_of_groups):.0f})')
     plt.legend(patches, names, loc="best")
     plt.axis('equal')
     plt.tight_layout()
     plt.pie(size_of_groups)
     fig = plt.gcf()
     fig.set_size_inches(8,15)
+    plt.title('Percentage of Types in List of Restaurants', fontdict=chart_font)
     plt.show()
   
     # plt.pie(size_of_groups, labels=names, labeldistance=1.15)
@@ -231,102 +237,45 @@ def piechart_restaurant_types():
     # plt.show()
 
 # Visualization #4
-# # def scatter_restaurants():
-# #     # This function takes no input, as it is designed to iterate through the ratings.csv file to create two dictionaries, which contain 
-# #     # both the average rating and price for each restaurant. These dictionaries are then used to create a scatter plot, which compares 
-# #     # the average ratings and price for each restaurant across the 25 different restaurant types.
+def piechart_restaurant_prices():
+    # Description
+    # Description
 
-# #     path = os.path.dirname(os.path.abspath(__file__))
-# #     conn = sqlite3.connect(path+'/restaurantData.db')
-# #     cur = conn.cursor()
+    dbName ='restaurantData.db'
+    conn = sqlite3.connect(dbName)
+    cursor = conn.cursor()
+    chart_font = {'family':'serif','color':'black','size':15}
 
-# #     restaurant1 = {}
-# #     restaurant2 = {}
-
-# #     with open('ratings.csv', 'r') as file:
-# #         reader = csv.reader(file)
-# #         next(reader)
-# #         for row in reader:
-# #             title = row[0]
-# #             rating = row[2]
-# #             type = row[-1]
-# #             price = row[-2]
-# #             if int(type) == 0:
-# #                 restaurant1[title] = [rating, price]
-# #             else:
-# #                 restaurant2[title] = [rating, price]
+    cursor.execute("SELECT * FROM Restaurants")
+    Price1Number = 0
+    Price2Number = 0
+    Price3Number = 0
+    Price4Number = 0
+    for row in cursor:
+        if row[6] == '$':
+            Price1Number += 1
+        elif row[6] == '$$':
+            Price2Number += 1
+        elif row[6] == '$$$':
+            Price3Number += 1
+        elif row[6] == '$$$$':
+            Price4Number += 1
     
-# #     sortedr1 = sorted(restaurant1.values(), key = lambda x: x[0])
-# #     sortedr2 = sorted(restaurant2.values(), key = lambda x: x[0])
-    
-# #     opentable_ratings = []
-# #     opentable_price = []
-# #     yelp_ratings = []
-# #     yelp_price = []
-
-# #     for key in sortedr1:
-# #         rating = key[0]
-# #         price = key[1]
-# #         opentable_ratings.append(rating)
-# #         opentable_price.append(price)
-
-# #     for key in sortedr2:
-# #         rating = key[0]
-# #         price = key[1]
-# #         yelp_ratings.append(rating)
-# #         yelp_price.append(price)
-    
-# #     plt.figure(figsize=(11, 6))
-    
-# #     plt.scatter(opentable_ratings, opentable_price, color='red', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='green', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='blue', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='yellow', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='cyan', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='magenta', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='pink', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='orange', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='grey', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='purple', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='black', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='brown', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='olive', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='tomato', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='gold', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='wheat', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='aqua', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='coral', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='tan', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='fuchsia', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='lime', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='plum', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='navy', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-# #     plt.scatter(yelp_ratings, yelp_price, color='orchid', marker='o', s=25, label='Yelp Ratings', edgecolor='black')
-# #     plt.scatter(opentable_ratings, opentable_price, color='crimson', marker='x', s=25, label='OpenTable Ratings', edgecolor='black')
-
-# #     plt.xticks(np.arange(len(yelp_ratings)), yelp_ratings, rotation=90)
-    
-# #     font1 = {'family':'serif','color':'black','size':20}
-# #     font2 = {'family':'serif','color':'black','size':15}
-# #     # plt.yscale('log')
-# #     plt.xlabel('Average Rating', fontdict=font2)
-# #     plt.ylabel('Price ($)', fontdict=font2)
-# #     plt.title('Price vs Average Rating', fontdict=font1)
-# #     plt.legend(loc="upper left")
-    
-# #     plt.savefig('ScatterGraph.jpeg')
-# #     plt.tight_layout()
-# #     plt.show()
-
-# def main():
-#     rating = getTypeRatingData('restaurantData.db')
-#     price = getTypePriceData('restaurantData.db')
-
-#     barchart_restaurant_ratings(rating, 'Restaurant Ratings Per Type.jpeg')
-#     barchart_restaurant_prices(price, 'Restaurants Prices Per Type.jpeg')
-# main()
+    names = ['Least Expensive', 'Second Least Expensive', 'Second Most Expensive', 'Most Expensive']
+    size_of_groups=[Price1Number, Price2Number, Price3Number, Price4Number]
+    colors = ['red', 'orange', 'green', 'blue']
+    patches, texts = plt.pie(size_of_groups, colors=colors, startangle=90)
+    plt.legend(patches, names, loc="best")
+    plt.axis('equal')
+    plt.tight_layout()
+    plt.pie(size_of_groups)
+    fig = plt.gcf()
+    fig.set_size_inches(6,8)
+    plt.title('Percentage of Prices in List of Restaurants', fontdict=chart_font)
+    plt.show()
 
 getTypeRatingData('restaurantData.db')
 barchart_restaurant_ratings(getTypeRatingData('restaurantData.db'), "Restaurant Ratings Per Type.jpeg")
 barchart_restaurant_prices(getTypePriceData('restaurantData.db'), "Restaurants Prices Per Type.jpeg")
 piechart_restaurant_types()
+piechart_restaurant_prices()
